@@ -1,0 +1,27 @@
+# --- Core & Notebooks ---
+jupyter
+notebook
+numpy
+pandas
+matplotlib
+scikit-learn
+
+# --- Deep Learning (PyTorch) ---
+# CPU版とGPU版はDockerfile側で切り替えるため、ここではバージョン指定なし
+torch
+torchvision
+torchaudio
+
+# --- NLP & V&L ---
+transformers
+accelerate
+sentencepiece # T5/AlbertなどのTokenizerで必要
+
+# --- Reinforcement Learning ---
+gymnasium[all]  # OpenAI Gymの後継 (allで基本的な環境も入る)
+pybullet        # 最終プロジェクトのロボットシミュレータ
+
+# --- Utilities ---
+tqdm            # 処理の進捗バー表示
+requests        # データセットのダウンロード用
+opencv-python-headless # 画像処理（GUI不要版）

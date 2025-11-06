@@ -1,0 +1,36 @@
+{
+    // 1. コンテナの名前（VSCode UIに表示される）
+    "name": "KMC ML Study Group 2025 Environment",
+
+    // 2. ビルド設定（Dockerfileの場所を指定）
+    "build": {
+        "dockerfile": "../Dockerfile", // リポジトリルートのDockerfileを使う
+        "context": ".."               // Dockerのビルドコンテキストをリポジトリルートに設定
+    },
+
+    "customizations": {
+        "vscode": {
+            // 3. 自動インストールするVSCode拡張機能
+            "extensions": [
+                "rust-lang.rust-analyzer",     // Rust Analyzer
+                "ms-python.python",            // Python拡張機能
+                "ms-toolsai.jupyter"           // Jupyter Notebookサポート
+            ],
+            // 4. コンテナ内で適用するVSCode設定
+            "settings": {
+                "python.pythonPath": "/usr/bin/python3",
+                "editor.formatOnSave": true
+            }
+        }
+    },
+
+
+    // 5. 自動でポートフォワーディングする
+    "forwardPorts": [8888], // Jupyter Notebookが使う8888ポートを転送
+
+    // 6. コンテナ作成後に実行するコマンド
+    "postCreateCommand": "cargo --version && python --version", // 起動時にバージョン確認
+
+    // 7. コンテナ内で作業するユーザー
+    "remoteUser": "vscode" // Dockerfile側で 'vscode' ユーザーが作成されている前提
+}

@@ -1,0 +1,42 @@
+# Dockerfile.gpu (tachyon等用)
+
+# 1. ベースイメージ: NVIDIA公式のPyTorchイメージを使用 (CUDA 12.1対応版)
+# これにより、CUDA, cuDNN, PyTorch (GPU版) がプリインストールされる
+FROM pytorch/pytorch:2.4.0-cuda12.1-cudnn8-devel
+
+# 2. aptパッケージの更新とRust、Git、その他ツールのインストール
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    git \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    ca-certificates \
+    # PyBulletがGUI表示に必要とするライブラリ (サーバー実行でも入れておくと安全)
+    libgl1-mesa-glx \
+    libegl1-mesa \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 3. Rust (rustup) のインストール
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Rustのパスを環境変数に追加
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# 4. uv (高速Pythonパッケージインストーラー) のインストール
+RUN cargo install uv
+
+# 5. requirements.txtをコピー
+COPY requirements.txt /tmp/requirements.txt
+
+# 6. uvを使ってPythonパッケージをインストール
+# (ベースイメージのPython環境に直接インストールする)
+# PyTorchはベースイメージに含まれているため、requirements.txtからは除外するか、
+# ここで --no-deps オプションを使うか、requirements.txt側で調整する
+# ここでは、requirements.txtからtorch関連をインストールしない前提で進める
+# (もしrequirements.txtにtorchが含まれていても、PyTorchイメージのバージョンが優先されるはず)
+RUN uv pip install -r /tmp/requirements.txt
+
+# 7. Jupyter Notebookがコンテナ外部からアクセスできるよう設定
+EXPOSE 8888
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
