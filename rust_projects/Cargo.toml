@@ -1,13 +1,4 @@
 [workspace]
 
 members = [
-    "week_02_linear_regression", # 第2回: 線形回帰
-    "week_04_svm",               # 第4回: サポートベクターマシン
-    "week_05_decision_tree",     # 第5回: 決定木
-    "week_06_mlp",               # 第6回: ニューラルネットワーク基礎
-    "week_07_deep_nn",           # 第7回: 深層学習テクニック
-    "week_08_autodiff",          # 第8回: 自動微分
-    "week_09_cnn",               # 第9回: 畳み込みニューラルネットワーク
-    "week_10_rnn_lstm",          # 第10回: 再帰型ニューラルネットワーク
-    "week_11_q_learning",        # 第11回: Q学習
 ]
